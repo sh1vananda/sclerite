@@ -10,7 +10,7 @@ import {
   Loader2,
 } from "lucide-react";
 
-const WORKER_URL = "http://127.0.0.1:8787/watermark";
+const WORKER_URL = import.meta.env.VITE_WORKER_URL;
 
 export default function EdgeMarkPro() {
   const [baseImage, setBaseImage] = useState(null);
