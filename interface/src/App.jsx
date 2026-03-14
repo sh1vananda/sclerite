@@ -9,6 +9,7 @@ import {
   ShieldCheck,
   Loader2,
 } from "lucide-react";
+import scleriteLogo from "./assets/logo.png";
 
 const WORKER_URL = import.meta.env.VITE_WORKER_URL;
 
@@ -84,7 +85,6 @@ export default function EdgeMarkPro() {
           ...common,
           backgroundImage: url,
           backgroundRepeat: "repeat",
-          // REDUCED SIZE: We use a tighter percentage to make watermarks smaller
           backgroundSize: `${(wmWidthPercent * 1.1).toFixed(2)}%`,
           backgroundPosition: "0 0",
         };
@@ -92,7 +92,6 @@ export default function EdgeMarkPro() {
       case "diagonal":
         return {
           ...common,
-          // FULL SPAN: Positions 0, 50, 100 ensure we hit the absolute borders
           backgroundImage: `${url}, ${url}, ${url}`,
           backgroundSize: `${wmWidthPercent}%, ${wmWidthPercent}%, ${wmWidthPercent}%`,
           backgroundPosition: "0% 0%, 50% 50%, 100% 100%",
@@ -120,8 +119,12 @@ export default function EdgeMarkPro() {
     <div className="min-h-screen bg-[#050505] text-zinc-400 font-sans antialiased selection:bg-white/10">
       <nav className="h-16 border-b border-white/5 flex items-center justify-between px-8 bg-black/40 backdrop-blur-xl sticky top-0 z-50">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center shadow-lg shadow-white/5">
-            <Ghost size={18} className="text-black" />
+          <div className="w-9 h-9 flex items-center justify-center">
+            <img
+              src={scleriteLogo}
+              alt="Sclerite Logo"
+              className="w-full h-full object-contain filter brightness-110 drop-shadow-[0_0_8px_rgba(255,255,255,0.1)]"
+            />
           </div>
           <div className="flex flex-col leading-none">
             <span className="text-white font-bold tracking-tight text-sm uppercase italic">
