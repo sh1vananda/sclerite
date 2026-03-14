@@ -5,8 +5,7 @@ import {
   Grid,
   Maximize,
   CornerDownRight,
-  Ghost,
-  ShieldCheck,
+  BoxSelect,
   Loader2,
 } from "lucide-react";
 import scleriteLogo from "./assets/logo.png";
@@ -123,7 +122,7 @@ export default function EdgeMarkPro() {
             <img
               src={scleriteLogo}
               alt="Sclerite Logo"
-              className="w-full h-full object-contain filter brightness-110 drop-shadow-[0_0_8px_rgba(255,255,255,0.1)]"
+              className="w-full h-full object-contain filter brightness-110 drop-shadow-[0_0_8px_rgba(255,255,255,0.1)] [image-rendering:antialiased]"
             />
           </div>
           <div className="flex flex-col leading-none">
@@ -187,7 +186,7 @@ export default function EdgeMarkPro() {
 
           <section>
             <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600 mb-5 flex items-center gap-2">
-              <Grid size={10} /> Layout Engine
+              Layout
             </h2>
             <div className="grid grid-cols-2 gap-2">
               {[
@@ -200,7 +199,7 @@ export default function EdgeMarkPro() {
                 },
                 {
                   id: "corners",
-                  icon: <ShieldCheck size={16} />,
+                  icon: <BoxSelect size={16} />,
                   label: "Corners",
                 },
               ].map((p) => (
