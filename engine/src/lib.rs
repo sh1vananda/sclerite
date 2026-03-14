@@ -4,20 +4,26 @@ mod engine;
 
 #[event(fetch)]
 pub async fn main(req: Request, env: Env, _ctx: Context) -> Result<Response> {
-    // 1. Initialize Global CORS Headers
+    // 1. Fetch the origin from Environment Variables (set in Cloudflare Dashboard)
+    let allowed_origin = env
+        .var("CORS_ALLOW_ORIGIN")
+        .map(|v| v.to_string())
+        .unwrap_or_else(|_| "*".to_string());
+
+    // 2. Initialize Global CORS Headers
     let headers = Headers::new();
-    headers.set("Access-Control-Allow-Origin", "*")?;
+    headers.set("Access-Control-Allow-Origin", &allowed_origin)?;
     headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")?;
     headers.set("Access-Control-Allow-Headers", "Content-Type")?;
 
-    // 2. Immediate Pre-flight (OPTIONS) Response
+    // 3. Immediate Pre-flight (OPTIONS) Response
     if req.method() == Method::Options {
         return Ok(Response::empty()?.with_headers(headers));
     }
 
     let router = Router::new();
 
-    // 3. Routing Logic
+    // 4. Routing Logic
     let res = router
         .post_async("/watermark", |mut req, _ctx| async move {
             let form = match req.form_data().await {
@@ -25,7 +31,7 @@ pub async fn main(req: Request, env: Env, _ctx: Context) -> Result<Response> {
                 Err(_) => return Response::error("Multipart form parse error", 400),
             };
 
-            // Extraction
+            // Asset Extraction
             let base_file = match form.get("image") {
                 Some(FormEntry::File(f)) => f,
                 _ => return Response::error("Base image missing", 400),
@@ -58,7 +64,6 @@ pub async fn main(req: Request, env: Env, _ctx: Context) -> Result<Response> {
                 })
                 .unwrap_or(1.0);
 
-            // Conversion to Bytes
             let base_bytes = base_file.bytes().await?;
             let wm_bytes = watermark_file.bytes().await?;
 
@@ -71,7 +76,7 @@ pub async fn main(req: Request, env: Env, _ctx: Context) -> Result<Response> {
         .run(req, env)
         .await;
 
-    // 4. Global Response Mapping
+    // 5. Global Response Mapping
     res.map(|r| {
         if r.status_code() == 200 {
             let _ = headers.set("Content-Type", "image/png");
