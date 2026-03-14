@@ -1,0 +1,9 @@
+name = "sclerite-api"
+main = "src/lib.rs"
+compatibility_date = "2024-03-01"
+
+[vars]
+CORS_ALLOW_ORIGIN = "*"
+
+[build]
+command = "worker-build --release"
